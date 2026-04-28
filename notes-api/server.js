@@ -1,4 +1,4 @@
-// server.js
+// import Express.js (Backend-библиотека), SQLite, OPTIONS (чтобы подключить Frontend, поскольку CORS запрещает)
 import express from 'express';
 import Database from 'better-sqlite3';
 import cors from "cors";
@@ -7,6 +7,7 @@ const app = express();
 
 app.use(cors());
 
+//Подключаем Database
 const db = new Database('data.db');
 app.use(express.json());
 
@@ -40,6 +41,7 @@ app.delete('/notes/:id', (req, res) => {
   res.status(204).send();
 });
 
+// Слушает запросы с порта 3000
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
