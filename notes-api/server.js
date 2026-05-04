@@ -16,6 +16,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS notes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     text TEXT NOT NULL,
+    done INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `);
@@ -25,8 +26,9 @@ app.post('/notes', (req, res) => {
   const { text } = req.body;
   if (!text) return res.status(400).json({ error: 'text is required' });
   
-  const result = db.prepare('INSERT INTO notes (text) VALUES (?)').run(text);
-  res.status(201).json({ id: result.lastInsertRowid, text });
+  const result = db
+  .prepare('INSERT INTO notes (text, done) VALUES (?, ?)')
+  .run(text, 0);
 });
 
 // READ — получить все заметки
@@ -34,6 +36,22 @@ app.get('/notes', (req, res) => {
   const notes = db.prepare('SELECT * FROM notes').all();
   res.json(notes);
 });
+
+
+// PATCH - частично изменить заметки
+app.patch('/notes/:id', (req, res) => {
+  const id = req.params.id;
+  const { done } = req.body;
+  if (done === undefined) {
+  return res.status(400).json({ error: "done is required" });
+}
+
+  db.prepare('UPDATE notes SET done = ? WHERE id = ?')
+    .run(done ? 1 : 0, id);
+
+  res.json({ success: true });
+});;
+
 
 // DELETE — удалить по id
 app.delete('/notes/:id', (req, res) => {
