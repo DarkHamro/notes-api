@@ -23,18 +23,27 @@ db.exec(`
 
 // CREATE — добавить заметку
 app.post('/notes', (req, res) => {
-  const { text } = req.body;
-  if (!text) return res.status(400).json({ error: 'text is required' });
-  
-  const result = db
-  .prepare('INSERT INTO notes (text, done) VALUES (?, ?)')
-  .run(text, 0);
+  try {
+    const { text } = req.body;
 
-  res.status(201).json({
-    id: result.lastInsertRowid,
-    text,
-    done: 0
-  });
+    if (!text) {
+      return res.status(400).json({ error: 'text is required' });
+    }
+
+    const result = db
+      .prepare('INSERT INTO notes (text, done) VALUES (?, ?)')
+      .run(text, 0);
+
+    return res.status(201).json({
+      id: result.lastInsertRowid,
+      text,
+      done: 0
+    });
+
+  } catch (err) {
+    console.log("POST ERROR:", err);
+    return res.status(500).json({ error: "server crash" });
+  }
 });
 
 // READ — получить все заметки
