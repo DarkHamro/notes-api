@@ -29,6 +29,12 @@ app.post('/notes', (req, res) => {
   const result = db
   .prepare('INSERT INTO notes (text, done) VALUES (?, ?)')
   .run(text, 0);
+
+  res.status(201).json({
+    id: result.lastInsertRowid,
+    text,
+    done: 0
+  });
 });
 
 // READ — получить все заметки
