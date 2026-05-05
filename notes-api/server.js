@@ -46,6 +46,30 @@ app.post('/notes', (req, res) => {
   }
 });
 
+// POST AI - добавляет ИИ на сайт
+app.post('/ai', async (req, res) => {
+  const { prompt } = req.body;
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "Ты помощник по задачам" },
+        { role: "user", content: prompt }
+      ]
+    })
+  });
+
+  const data = await response.json();
+
+  res.json(data.choices[0].message);
+});
+
 // READ — получить все заметки
 app.get('/notes', (req, res) => {
   const notes = db.prepare('SELECT * FROM notes').all();
