@@ -9,7 +9,11 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: '*', // Разрешает запросы с любых сайтов
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 
 //Подключаем Database
 const db = new Database('data.db');
