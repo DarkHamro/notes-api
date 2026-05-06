@@ -1,8 +1,11 @@
 // import Express.js (Backend-библиотека), SQLite, OPTIONS (чтобы подключить Frontend, поскольку CORS запрещает)
-import Express from 'express';
-import Database from 'better-sqlite3';
-import CORS from "cors";
+import express from 'express';
+import database from 'better-sqlite3';
+import cors from "cors";
 import OpenAI from 'openai';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
