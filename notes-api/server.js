@@ -1,7 +1,8 @@
 // import Express.js (Backend-библиотека), SQLite, OPTIONS (чтобы подключить Frontend, поскольку CORS запрещает)
-import express from 'express';
+import Express from 'express';
 import Database from 'better-sqlite3';
-import cors from "cors";
+import CORS from "cors";
+import OpenAI from 'openai';
 
 const app = express();
 
@@ -46,28 +47,39 @@ app.post('/notes', (req, res) => {
   }
 });
 
-// POST AI - добавляет ИИ на сайт
+// OpenAi - интегрирует ИИ в сайт
 app.post('/ai', async (req, res) => {
-  const { prompt } = req.body;
+  try {
+    const { prompt } = req.body;
+    
+    if (!prompt) return res.status(400).json({ error: "Empty prompt" });
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "Ты помощник по задачам" },
-        { role: "user", content: prompt }
-      ]
-    })
-  });
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "Ты помощник по задачам. Отвечай кратко и по делу." },
+          { role: "user", content: prompt }
+        ],
+        max_tokens: 200 // Ограничиваем расход токенов
+      })
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  res.json(data.choices[0].message);
+    if (data.error) {
+      return res.status(500).json({ error: data.error.message });
+    }
+
+    res.json({ content: data.choices[0].message.content });
+  } catch (err) {
+    res.status(500).json({ error: "Server Error" });
+  }
 });
 
 // READ — получить все заметки
