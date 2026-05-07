@@ -88,11 +88,13 @@ app.post('/ai', async (req, res) => {
       return res.status(500).json({ error: data.error.message });
     }
 
-    res.json({ content: data.choices[0].message.content });
+    // Правильно: берем данные из переменной data
+    res.json({ reply: data.choices[0].message.content });
+
   } catch (err) {
-    res.status(500).json({ error: "Server Error" });
-  }
-});
+    console.error('Ошибка OpenAI:', err); // Используем err
+    res.status(500).json({ error: 'Ошибка ИИ', details: err.message });
+  }});
 
 // READ — получить все заметки
 app.get('/notes', (req, res) => {
@@ -123,12 +125,11 @@ app.delete('/notes/:id', (req, res) => {
 });
 
 // Слушает запросы с порта 3000
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log("Server running on port", PORT)
-})
-
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Сервер запущен на порту ${PORT}`);
+});
 
 
 
