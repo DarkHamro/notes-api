@@ -13,9 +13,14 @@ const app = express();
 app.use(cors({
   origin: true,
   credentials: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// 2. Добавь этот путь, чтобы по ссылке без /notes не было ошибки:
+app.get('/', (req, res) => {
+  res.send('Бэкенд notes-api запущен и готов к работе!');
+});
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Сервер видит тебя!' });
