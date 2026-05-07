@@ -59,7 +59,7 @@ app.post('/notes', (req, res) => {
   }
 });
 
-// OpenAi - интегрирует ИИ в сайт
+/* OpenAi - интегрирует ИИ в сайт
 app.post('/ai', async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -95,6 +95,22 @@ app.post('/ai', async (req, res) => {
     console.error('Ошибка OpenAI:', err); // Используем err
     res.status(500).json({ error: 'Ошибка ИИ', details: err.message });
   }});
+*/
+
+app.post('/ai', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    console.log("Запрос к ИИ:", prompt);
+
+    // ВРЕМЕННО: Вместо запроса к OpenAI возвращаем готовый текст
+    return res.json({ 
+      reply: `Я получил твой запрос: "${prompt}". К сожалению, баланс OpenAI пуст, но связь между Vercel и Railway работает идеально! Выпей кофе, ты проделал огромную работу.` 
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // READ — получить все заметки
 app.get('/notes', (req, res) => {
