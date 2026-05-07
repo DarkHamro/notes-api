@@ -3,6 +3,8 @@ import express from 'express';
 import Database from 'better-sqlite3';
 import cors from "cors";
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 dotenv.config();
 
@@ -20,7 +22,8 @@ app.get('/health', (req, res) => {
 });
 
 //Подключаем Database
-const db = new Database('data.db');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const db = new Database(path.join(__dirname, 'data.db'));
 app.use(express.json());
 
 // Создаём таблицу при старте
