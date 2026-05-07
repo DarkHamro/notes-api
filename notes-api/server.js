@@ -2,7 +2,6 @@
 import express from 'express';
 import Database from 'better-sqlite3';
 import cors from "cors";
-import OpenAI from 'openai';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -132,7 +131,7 @@ app.patch('/notes/:id', (req, res) => {
     .run(done ? 1 : 0, id);
 
   res.json({ success: true });
-});;
+});
 
 
 // DELETE — удалить по id
