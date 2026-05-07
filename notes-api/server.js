@@ -10,10 +10,15 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: '*', // Разрешает запросы с любых сайтов
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  origin: true,
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Сервер видит тебя!' });
+});
 
 //Подключаем Database
 const db = new Database('data.db');
