@@ -1,0 +1,17 @@
+\\ NAME PROJECT: Infinity
+\\ TYPE OF THE PROJECT: TO-DO list
+
+Tech Stek:
+1. <Node.js (server programming language)>
+2. <Express.js (server programming framework)>
+3. <SQLite (database)>
+4. <Git (you know it already)>
+5. <JavaScript (programming language for web)>
+
+The possibilites:
+1. Make notes (by typing your note in input and posting it by pressing <Enter>)
+2. Auto-saving notes (you automatically save them by posting notes)
+3. Compelete goal (by clicking on the note)
+4. Delete notes (if you want so)
+5. Use AI-assistant (by clicking ✨ and typing your prompt in modal window)
+
