@@ -13,5 +13,5 @@ A clean and functional full-stack TO-DO list application.
 2. **Auto-saving:** All posted notes are automatically saved to the database.
 3. **Complete goals:** Click on a note to toggle its completion status.
 4. **Delete notes:** Remove tasks from your list whenever you want.
-5. **AI Assistant:** Click the ✨ button to open a modal window and chat with an embedded AI.
+5. **AI Assistant:** Click the ✨ button to open a modal window and chat with an embedded AI. Right now is unavailable :(
 
