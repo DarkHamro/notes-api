@@ -8,8 +8,8 @@ export const askAI = async (req, res) => {
       return res.status(500).json({ error: "Ключ GEMINI_API_KEY не найден на сервере" });
     }
 
-    // Самый стабильный эндпоинт, работающий напрямую без SDK
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+    // Строго v1beta и строго gemini-1.5-flash без лишних слов
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
