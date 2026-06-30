@@ -10,10 +10,13 @@ export const askAI = async (req, res) => {
       return res.status(500).json({ error: "Ключ GEMINI_API_KEY не найден в переменных окружения сервера" });
     }
 
-    // Initializing official gemini
-    const ai = new GoogleGenAI({ apiKey });
+    // Инициализируем официальный клиент со строгим указанием версии v1
+    const ai = new GoogleGenAI({ 
+      apiKey,
+      apiVersion: 'v1' 
+    });
 
-    // Calling directly through SDK
+    // Вызываем модель напрямую через SDK
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: `Ты встроенный умный помощник в To-Do приложении. Отвечай кратко, ёмко и по делу. Клиент спрашивает: ${prompt}`,
