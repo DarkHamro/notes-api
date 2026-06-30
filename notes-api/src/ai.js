@@ -9,7 +9,7 @@ export const askAI = async (req, res) => {
     }
     
     // Gemini 1.5 (the most versatail model)
-    const url = `const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`
 
     const response = await fetch(url, {
       method: "POST",
@@ -30,7 +30,7 @@ export const askAI = async (req, res) => {
       return res.status(500).json({ error: data.error.message });
     }
 
-    // Правильно достаем текст ответа из структуры данных Gemini
+    // Correctly taking out the data
     const reply = data.candidates[0].content.parts[0].text;
     res.json({ reply });
 
