@@ -3,28 +3,39 @@ export const askAI = async (req, res) => {
     const { prompt } = req.body;
     if (!prompt) return res.status(400).json({ error: "Empty prompt" });
 
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: "Ключ GEMINI_API_KEY не найден в переменных окружения сервера" });
+    }
+    
+    // Gemini 1.5 (the most versatail model)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.GEMINI_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gemini-2.5-flash", 
-        messages: [
-          { role: "system", content: "Ты встроенный умный помощник в To-Do приложении. Отвечай кратко и по делу." },
-          { role: "user", content: prompt }
-        ],
-        max_tokens: 200
+        contents: [{
+          parts: [{ text: `Ты встроенный умный помощник в To-Do приложении. Отвечай кратко, ёмко и по делу. Клиент спрашивает: ${prompt}` }]
+        }]
       })
     });
 
     const data = await response.json();
-    if (data.error) return res.status(500).json({ error: data.error.message });
 
-    res.json({ reply: data.choices[0].message.content });
+    if (data.error) {
+      console.error('Ошибка от Google API:', data.error);
+      return res.status(500).json({ error: data.error.message });
+    }
+
+    // Правильно достаем текст ответа из структуры данных Gemini
+    const reply = data.candidates[0].content.parts[0].text;
+    res.json({ reply });
+
   } catch (err) {
-    console.error('Ошибка Gemini API:', err);
+    console.error('Критическая ошибка в askAI:', err);
     res.status(500).json({ error: 'Ошибка ИИ', details: err.message });
   }
 };
