@@ -1,17 +1,17 @@
-\\ NAME PROJECT: Infinity
-\\ TYPE OF THE PROJECT: TO-DO list
+# Infinity
 
-Tech Stek:
-1. <Node.js (server programming language)>
-2. <Express.js (server programming framework)>
-3. <SQLite (database)>
-4. <Git (you know it already)>
-5. <JavaScript (programming language for web)>
+A clean and functional full-stack TO-DO list application.
 
-The possibilites:
-1. Make notes (by typing your note in input and posting it by pressing <Enter>)
-2. Auto-saving notes (you automatically save them by posting notes)
-3. Compelete goal (by clicking on the note)
-4. Delete notes (if you want so)
-5. Use AI-assistant (by clicking ✨ and typing your prompt in modal window)
+## Tech Stack
+* **Backend:** Node.js, Express.js
+* **Database:** SQLite
+* **Frontend:** JavaScript (HTML/CSS)
+* **Version Control:** Git
+
+## Features
+1. **Make notes:** Type your note in the input field and press `Enter` to post it.
+2. **Auto-saving:** All posted notes are automatically saved to the database.
+3. **Complete goals:** Click on a note to toggle its completion status.
+4. **Delete notes:** Remove tasks from your list whenever you want.
+5. **AI Assistant:** Click the ✨ button to open a modal window and chat with an embedded AI.
 

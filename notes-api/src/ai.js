@@ -1,5 +1,3 @@
-import { GoogleGenAI } from '@google/genai';
-
 export const askAI = async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -7,25 +5,35 @@ export const askAI = async (req, res) => {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: "Ключ GEMINI_API_KEY не найден в переменных окружения сервера" });
+      return res.status(500).json({ error: "Ключ GEMINI_API_KEY не найден на сервере" });
     }
 
-    // Инициализируем официальный клиент со строгим указанием версии v1
-    const ai = new GoogleGenAI({ 
-      apiKey,
-      apiVersion: 'v1' 
+    // Самый стабильный эндпоинт, работающий напрямую без SDK
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: `Ты встроенный умный помощник в To-Do приложении. Отвечай кратко, ёмко и по делу. Клиент спрашивает: ${prompt}` }]
+        }]
+      })
     });
 
-    // Вызываем модель напрямую через SDK
-    const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: `Ты встроенный умный помощник в To-Do приложении. Отвечай кратко, ёмко и по делу. Клиент спрашивает: ${prompt}`,
-    });
+    const data = await response.json();
 
-    // Taking text from SDK
-    const reply = response.text;
-    
+    if (data.error) {
+      console.error('Ошибка от Google API:', data.error);
+      return res.status(500).json({ error: data.error.message });
+    }
+
+    // Извлекаем текст ответа
+    const reply = data.candidates[0].content.parts[0].text;
     res.json({ reply });
+
   } catch (err) {
     console.error('Критическая ошибка в askAI:', err);
     res.status(500).json({ error: 'Ошибка ИИ', details: err.message });
