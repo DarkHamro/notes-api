@@ -36,6 +36,6 @@ export const askAI = async (req, res) => {
 
   } catch (err) {
     console.error('Критическая ошибка в askAI:', err);
-    res.status(500).json({ error: 'Ошибка ИИ', details: err.message });
+    res.status(500).json({ error: 'В связи с изменением лимитов Google AI Studio, модуль ИИ временно находится на техобслуживании', details: err.message });
   }
 };
